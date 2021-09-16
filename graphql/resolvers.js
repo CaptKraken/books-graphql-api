@@ -37,6 +37,9 @@ export const resolvers = {
     },
     getUser: async (_par, { id }) => {
       const user = await posgres("people").select("*").where({ id }).first();
+
+      if (!user) throw new Error(`No user found by that id.`);
+
       return user;
     },
     getUsers: async (_par, { sortBy, sortDirection, limit, offset }) => {
@@ -45,14 +48,18 @@ export const resolvers = {
         .orderBy(sortBy, sortDirection)
         .limit(Number(limit))
         .offset(Number(offset));
+
+      if (!users) throw new Error(`No user found.`);
       return users.map((user) => user);
     },
     getAuthor: async (_par, { authorid: author_id }) => {
-      const book = await posgres("authors")
+      const author = await posgres("authors")
         .select("*")
         .where({ author_id })
         .first();
-      return book;
+
+      if (!author) throw new Error(`No author found by that id.`);
+      return author;
     },
     getAuthors: async (_par, { sortBy, sortDirection, limit, offset }) => {
       const authors = await posgres("authors")
@@ -60,6 +67,7 @@ export const resolvers = {
         .orderBy(sortBy, sortDirection)
         .limit(Number(limit))
         .offset(Number(offset));
+      if (!authors) throw new Error(`No author found.`);
       return authors.map((author) => author);
     },
     getBook: async (_par, { bookid: book_id }) => {
@@ -67,6 +75,7 @@ export const resolvers = {
         .select("*")
         .where({ book_id })
         .first();
+      if (!book) throw new Error(`No book found by that id.`);
       return book;
     },
     getBooks: async (_par, { sortBy, sortDirection, limit, offset }) => {
@@ -75,6 +84,8 @@ export const resolvers = {
         .orderBy(sortBy, sortDirection)
         .limit(Number(limit))
         .offset(Number(offset));
+
+      if (!books) throw new Error(`No book found.`);
       return books.map((book) => book);
     },
     searchBooks: async (_par, { searchTerm }) => {
@@ -87,6 +98,8 @@ export const resolvers = {
         .orWhereRaw(`LOWER(books.description) LIKE '%${term}%'`)
         .orderBy("books.book_id")
         .limit(50);
+
+      if (!books) throw new Error(`No book found.`);
       return books.map((book) => book);
     },
   },
@@ -101,7 +114,7 @@ export const resolvers = {
     ) => {
       // check for empty fields
       if (!name || !email || !password) {
-        throw new Error("fields can't be empty");
+        throw new Error("Fields can't be empty.");
       }
 
       email = email.toLowerCase();
@@ -120,6 +133,9 @@ export const resolvers = {
       return user;
     },
     addUser: async (_par, { input: { name, email, password, role } }) => {
+      if (!name || !email || !password)
+        throw new Error("Fields can't be empty.");
+
       email = email.toLowerCase();
       const exist = await posgres("people")
         .select("*")
@@ -143,6 +159,9 @@ export const resolvers = {
       return addedBook[0];
     },
     addAuthor: async (_par, { name: author_name }) => {
+      if (!author_name) {
+        throw new Error("Author's name can not be empty.");
+      }
       const addedAuthor = await posgres("authors")
         .insert([{ author_name }])
         .returning("*");
@@ -152,11 +171,11 @@ export const resolvers = {
     // EDIT
     editUser: async (_par, { id, input }) => {
       const originalUser = await posgres("people")
-        .select("*")
-        .where({
-          id,
-        })
+        .select()
+        .where({ id })
         .first();
+
+      if (!originalUser) throw new Error(`No user with that id found.`);
 
       // compare the input with the original
       const toBeUpdated = await getNewInfo(input, originalUser);
@@ -176,6 +195,8 @@ export const resolvers = {
           id: String(user?.id),
         })
         .first();
+
+      if (!originalMe) throw new Error(`No user with that id found.`);
 
       // compare the input with the original
       const toBeUpdated = await getNewInfo(input, originalMe);
@@ -199,6 +220,8 @@ export const resolvers = {
           author_id,
         })
         .first();
+
+      if (!originalAuthor) throw new Error(`No user with that id found.`);
 
       // compare the input with the original
       const toBeUpdated = await getNewInfo(
@@ -232,6 +255,8 @@ export const resolvers = {
         .where({ book_id })
         .first();
 
+      if (!originalBook) throw new Error(`No user with that id found.`);
+
       // compare the input with the original
       const toBeUpdated = await getNewInfo(input, originalBook);
       // if there's nothing to update, returns the original
@@ -250,6 +275,10 @@ export const resolvers = {
         .where({ id: String(userid) })
         .del()
         .returning("*");
+
+      if (!deletedUser || deletedUser.length === 0)
+        throw new Error(`No user with that id found.`);
+
       const isDeleted = await Boolean(deletedUser.length);
       return { deleted: isDeleted, deletedUser };
     },
@@ -258,6 +287,10 @@ export const resolvers = {
         .where({ book_id: String(bookid) })
         .del()
         .returning("*");
+
+      if (!deletedBook || deletedBook.length === 0)
+        throw new Error(`No user with that id found.`);
+
       const isDeleted = await Boolean(deletedBook.length);
       return { deleted: isDeleted, deletedBook };
     },
@@ -266,6 +299,10 @@ export const resolvers = {
         .where({ author_id: String(authorid) })
         .del()
         .returning("*");
+
+      if (!deletedAuthor || deletedAuthor.length === 0)
+        throw new Error(`No user with that id found.`);
+
       const isDeleted = await Boolean(deletedAuthor.length);
       return { deleted: isDeleted, deletedAuthor };
     },

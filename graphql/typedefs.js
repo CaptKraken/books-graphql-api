@@ -46,14 +46,14 @@ export const typeDefs = gql`
     # ADD
     addUser(input: UserInput!): User! @permission(role: "admin")
     addAuthor(name: String!): Author! @authenticated @permission(role: "editor")
-    addBook(input: BookInput): Book! @permission(role: "editor")
+    addBook(input: BookInput!): Book! @permission(role: "editor")
 
     # EDIT
     editMe(input: UserInput!): User! @authenticated
     editUser(id: ID!, input: UserInput!): User! @permission(role: "admin")
     editAuthor(authorid: ID!, authorname: String!): Author!
       @permission(role: "editor")
-    editBook(bookid: ID!, input: BookInput): Book! @permission(role: "editor")
+    editBook(bookid: ID!, input: BookInput!): Book! @permission(role: "editor")
 
     # DELETE
     deleteUser(userid: ID!): DeleteResponse! @permission(role: "admin")
@@ -85,7 +85,7 @@ export const typeDefs = gql`
   }
 
   type DeleteResponse {
-    deleted: Boolean!
+    deleted: Boolean
     deletedUser: [User]
     deletedBook: [Book]
     deletedAuthor: [Author]
