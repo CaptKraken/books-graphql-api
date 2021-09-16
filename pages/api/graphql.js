@@ -16,6 +16,7 @@ import {
   permission,
 } from "../../graphql/directives";
 import { newCookie, posgres } from "../../utils";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
 
 function runMiddleware(req, res, fn) {
   return new Promise((resolve, reject) => {
@@ -72,6 +73,7 @@ const apolloServer = new ApolloServer({
   },
   // For apollo studio
   introspection: true,
+  plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
 });
 
 const startServer = apolloServer.start();
