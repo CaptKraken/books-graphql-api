@@ -1,22 +1,23 @@
 import { ApolloServer } from "apollo-server-micro";
 import Cors from "cors";
-import DataLoader from "dataloader";
-import { typeDefs } from "../../graphql/typedefs";
-import { resolvers } from "../../graphql/resolvers";
 import jwt from "jsonwebtoken";
-const cors = Cors({
-  methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
-  credentials: true,
-});
-
+import DataLoader from "dataloader";
 import { makeExecutableSchema } from "@graphql-tools/schema";
+import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+
+import { typeDefs } from "@/graphql/typedefs";
+import { resolvers } from "@/graphql/resolvers";
 import {
   isAuthenticated,
   isCurrentUserDirectiveTransformer,
   permission,
-} from "../../graphql/directives";
-import { newCookie, posgres } from "../../utils";
-import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
+} from "@/graphql/directives";
+import { newCookie, posgres } from "@/utils/index";
+
+const cors = Cors({
+  methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
+  credentials: true,
+});
 
 function runMiddleware(req, res, fn) {
   return new Promise((resolve, reject) => {

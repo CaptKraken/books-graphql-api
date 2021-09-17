@@ -4,7 +4,7 @@ import {
   getNewInfo,
   newCookie,
   posgres,
-} from "../utils";
+} from "@/utils/index";
 
 // TODO: ADD A SORT FUNCTION (check getUsers for example)
 
