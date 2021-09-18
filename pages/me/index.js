@@ -4,7 +4,6 @@ const MePage = () => {
   return (
     <>
       <HeadHTML title="Your Profile" />
-      me page
     </>
   );
 };

@@ -13,6 +13,7 @@ import {
   permission,
 } from "@/graphql/directives";
 import { newCookie, posgres } from "@/utils/index";
+import { QuoteApi } from "@/graphql/quoteapi";
 
 const cors = Cors({
   methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
@@ -72,6 +73,9 @@ const apolloServer = new ApolloServer({
     }
     return { user, loaders, res };
   },
+  dataSources: () => ({
+    quoteAPI: new QuoteApi(),
+  }),
   // For apollo studio
   introspection: true,
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],

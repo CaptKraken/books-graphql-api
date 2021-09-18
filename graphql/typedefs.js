@@ -14,6 +14,7 @@ export const typeDefs = gql`
     getUser(id: ID! = 1): User!
     getBook(bookid: ID! = 1): Book!
     getAuthor(authorid: ID! = 1): Author!
+    getRandomQuote: Quote!
 
     # GET MULTIPLE
     getUsers(
@@ -113,5 +114,9 @@ export const typeDefs = gql`
     id: ID!
     name: String!
     books: [Book]!
+  }
+  type Quote {
+    text: String!
+    author: String!
   }
 `;

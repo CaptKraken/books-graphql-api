@@ -5,6 +5,7 @@ import {
   newCookie,
   posgres,
 } from "@/utils/index";
+import { randomQuote } from "./localquotes";
 
 // TODO: ADD A SORT FUNCTION (check getUsers for example)
 
@@ -60,6 +61,16 @@ export const resolvers = {
 
       if (!author) throw new Error(`No author found by that id.`);
       return author;
+    },
+    getRandomQuote: async (_par, _args, { dataSources }, _info) => {
+      let res = await dataSources.quoteAPI.getRandomMotivationalQuote();
+
+      if (!res || !res?.quotes || res?.quotes?.length === 0) {
+        return randomQuote();
+      }
+
+      const { text, author } = res.quotes[0];
+      return { text, author };
     },
     getAuthors: async (_par, { sortBy, sortDirection, limit, offset }) => {
       const authors = await posgres("authors")
