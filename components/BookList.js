@@ -15,6 +15,7 @@ var settings = {
   speed: 500,
   slidesToShow: 5,
   slidesToScroll: 5,
+  swipeToSlide: true,
   responsive: [
     {
       breakpoint: 1024,
