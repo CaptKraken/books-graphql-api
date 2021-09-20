@@ -1,5 +1,10 @@
 .slick-slider .slick-track,
 .slick-slider .slick-list {
-  position: relative;
-  overflow: unset !important;
+  overflow: visible;
+  /* position: relative; */
+  /* overflow: unset !important; */
+}
+
+.swiper {
+  overflow: visible !important;
 }

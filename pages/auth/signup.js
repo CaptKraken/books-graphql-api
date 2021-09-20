@@ -1,6 +1,6 @@
-import SignIn from "@/components/SignIn";
+import SignUp from "@/components/SignUp";
 
-const SignInPage = () => {
+const SignOutPage = () => {
   /**
    * if(isAuth) redirect '/'
    */
@@ -14,12 +14,12 @@ const SignInPage = () => {
           alt="Workflow"
         />
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-          Sign in to Internal Books
+          Sign up for Internal Books
         </h2>
       </div>
-      <SignIn />
+      <SignUp />
     </div>
   );
 };
 
-export default SignInPage;
+export default SignOutPage;

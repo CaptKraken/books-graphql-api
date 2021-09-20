@@ -1,4 +1,4 @@
-import BookList from "@/components/BookList";
+import BooksList from "@/components/BooksList";
 import Hero from "@/components/Hero";
 import HeadHTML from "../components/layout/Head";
 
@@ -7,7 +7,7 @@ const Home = () => {
     <>
       <HeadHTML title="Home" />
       <Hero />
-      <BookList />
+      <BooksList />
     </>
   );
 };
