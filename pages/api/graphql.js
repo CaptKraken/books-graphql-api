@@ -54,6 +54,18 @@ const loaders = {
 
     return ids.map((id) => lookup[id] || null);
   }),
+  categories: new DataLoader(async (ids) => {
+    const rows = await posgres("categories")
+      .select()
+      .whereIn("category_id", ids);
+    // look up object
+    const lookup = rows.reduce((acc, row) => {
+      acc[row.category_id] = row;
+      return acc;
+    }, {});
+
+    return ids.map((id) => lookup[id] || null);
+  }),
 };
 
 const apolloServer = new ApolloServer({

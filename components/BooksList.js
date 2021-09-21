@@ -46,7 +46,7 @@ const BooksList = ({ title, href, books }) => {
 
   return (
     <div className="pt-2 sm:pt-8 pb-4 px-2 overflow-hidden relative">
-      <div className="mb-4 xs:mb-6 flex items-center xs:flex-row justify-between xs:items-baseline ">
+      <div className="mb-4 flex items-center xs:flex-row justify-between xs:items-baseline ">
         <div className="flex items-baseline gap-2">
           <h2
             className="text-base xs:text-lg sm:text-2xl font-bold"

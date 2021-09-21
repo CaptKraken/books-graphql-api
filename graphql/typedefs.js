@@ -13,6 +13,7 @@ export const typeDefs = gql`
     me: User! @authenticated
     getUser(id: ID! = 1): User!
     getBook(bookid: ID! = 1): Book!
+    getCategory(category_id: ID! = 1): Category!
     getAuthor(authorid: ID! = 1): Author!
     getRandomQuote: Quote!
 
@@ -35,6 +36,12 @@ export const typeDefs = gql`
       limit: Int = 50
       offset: Int = 0
     ): [Book!]!
+    getCategories(
+      sortBy: String = "category_id"
+      sortDirection: String = "asc"
+      limit: Int = 50
+      offset: Int = 0
+    ): [Category!]!
 
     # SEARCH
     searchBooks(searchTerm: String): [Book!]!
@@ -48,6 +55,7 @@ export const typeDefs = gql`
     addUser(input: UserInput!): User! @permission(role: "admin")
     addAuthor(name: String!): Author! @authenticated @permission(role: "editor")
     addBook(input: BookInput!): Book! @permission(role: "editor")
+    addCategory(input: CategoryInput!): Category! @permission(role: "editor")
 
     # EDIT
     editMe(input: UserInput!): User! @authenticated
@@ -55,11 +63,15 @@ export const typeDefs = gql`
     editAuthor(authorid: ID!, authorname: String!): Author!
       @permission(role: "editor")
     editBook(bookid: ID!, input: BookInput!): Book! @permission(role: "editor")
+    editCategory(category_id: ID!, input: CategoryInput!): Category!
+      @permission(role: "editor")
 
     # DELETE
     deleteUser(userid: ID!): DeleteResponse! @permission(role: "admin")
     deleteAuthor(authorid: ID!): DeleteResponse! @permission(role: "editor")
     deleteBook(bookid: ID!): DeleteResponse! @permission(role: "editor")
+    deleteCategory(category_id: ID!): DeleteResponse!
+      @permission(role: "editor")
   }
 
   input SignUpInput {
@@ -81,8 +93,14 @@ export const typeDefs = gql`
     published: Int
     page_count: Int
     authors: [ID!]
+    categories: [ID!]
     description: String
     image_url: String
+  }
+
+  input CategoryInput {
+    name_english: String!
+    name_khmer: String
   }
 
   type DeleteResponse {
@@ -90,6 +108,7 @@ export const typeDefs = gql`
     deletedUser: [User]
     deletedBook: [Book]
     deletedAuthor: [Author]
+    deletedCategory: [Category]
   }
 
   type User {
@@ -106,6 +125,7 @@ export const typeDefs = gql`
     published: Int
     page_count: Int
     authors: [Author]
+    categories: [Category]
     description: String
     image_url: String
   }
@@ -115,6 +135,13 @@ export const typeDefs = gql`
     name: String!
     books: [Book]!
   }
+
+  type Category {
+    id: ID
+    name_english: String
+    name_khmer: String
+  }
+
   type Quote {
     text: String!
     author: String!

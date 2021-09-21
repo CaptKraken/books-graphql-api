@@ -99,6 +99,25 @@ export const resolvers = {
       if (!books) throw new Error(`No book found.`);
       return books.map((book) => book);
     },
+    getCategory: async (_par, { category_id }) => {
+      const category = await posgres("categories")
+        .select()
+        .where({ category_id })
+        .first();
+
+      if (!category) throw new Error(`No category found.`);
+      return category;
+    },
+    getCategories: async (_par, { sortBy, sortDirection, limit, offset }) => {
+      const categories = await posgres("categories")
+        .select()
+        .orderBy(sortBy, sortDirection)
+        .limit(Number(limit))
+        .offset(Number(offset));
+
+      if (!categories) throw new Error(`No book found.`);
+      return categories.map((category) => category);
+    },
     searchBooks: async (_par, { searchTerm }) => {
       const term = searchTerm.toLowerCase();
       const books = await posgres("books")
@@ -178,6 +197,17 @@ export const resolvers = {
         .returning("*");
       return addedAuthor[0];
     },
+    addCategory: async (_par, { input: { name_english, name_khmer } }) => {
+      console.log();
+      if (!name_english || !name_khmer) {
+        throw new Error("category's name can not be empty.");
+      }
+      const addedCategory = await posgres("categories")
+        .insert([{ category_name: name_english, category_name_km: name_khmer }])
+        .returning("*");
+      console.log(addedCategory);
+      return addedCategory[0];
+    },
 
     // EDIT
     editUser: async (_par, { id, input }) => {
@@ -249,6 +279,34 @@ export const resolvers = {
         .returning("*");
       return editedAuthor[0];
     },
+    editCategory: async (
+      _par,
+      { category_id, input: { name_english, name_khmer } }
+    ) => {
+      const originalCategory = await posgres("categories")
+        .select("*")
+        .where({
+          category_id,
+        })
+        .first();
+
+      if (!originalCategory) throw new Error(`No category with that id found.`);
+
+      // compare the input with the original
+      const toBeUpdated = await getNewInfo(
+        { category_name: name_english, category_name_km: name_khmer },
+        originalCategory
+      );
+
+      // if there's nothing to update, returns the original
+      if (Object.keys(toBeUpdated).length === 0) return originalCategory;
+
+      const editedCategory = await posgres("categories")
+        .where({ category_id })
+        .update(toBeUpdated)
+        .returning("*");
+      return editedCategory[0];
+    },
     editBook: async (_par, { id: book_id, input }) => {
       // make sure array input.authors is an array of int.
       if (input["authors"]) {
@@ -317,13 +375,25 @@ export const resolvers = {
       const isDeleted = await Boolean(deletedAuthor.length);
       return { deleted: isDeleted, deletedAuthor };
     },
+    deleteCategory: async (_par, { category_id }) => {
+      const deletedCategory = await posgres("categories")
+        .where({ category_id: String(category_id) })
+        .del()
+        .returning("*");
+      if (!deletedCategory || deletedCategory.length === 0)
+        throw new Error(`No category with that id found.`);
+
+      const isDeleted = Boolean(deletedCategory.length);
+      return { deleted: isDeleted, deletedCategory };
+    },
   },
 
   DeleteResponse: {
-    deleted: (response) => response.ok,
+    deleted: (response) => response.deleted,
     deletedUser: (response) => response.deletedUser,
     deletedBook: (response) => response.deletedBook,
     deletedAuthor: (response) => response.deletedAuthor,
+    deletedCategory: (response) => response.deletedCategory,
   },
 
   User: {
@@ -345,6 +415,12 @@ export const resolvers = {
       );
       return authors;
     },
+    categories: (book, _args, { loaders }) => {
+      const categories = book?.categories?.map((category_id) =>
+        loaders?.categories?.load(category_id)
+      );
+      return categories;
+    },
     description: (book) => book.description,
     image_url: (book) => book.image_url,
   },
@@ -360,5 +436,11 @@ export const resolvers = {
         .limit(50);
       return books.map((book) => book);
     },
+  },
+
+  Category: {
+    id: (category) => category.category_id,
+    name_english: (category) => category.category_name,
+    name_khmer: (category) => category.category_name_km,
   },
 };
