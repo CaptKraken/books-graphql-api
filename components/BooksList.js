@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Book from "./Book";
 import {
   ChevronDoubleLeftIcon,
@@ -14,6 +14,7 @@ const BooksList = ({ title, href, books }) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [slidesPerView, setSlidePerView] = useState(0);
   const [slideCount, setSlideCount] = useState(0);
+  const [hide, setHide] = useState(true);
   const handleNextSlides = () => {
     return swiperRef?.current?.swiper?.slideTo(activeSlide + slidesPerView);
   };
@@ -21,6 +22,11 @@ const BooksList = ({ title, href, books }) => {
   const handlePrevSlides = () => {
     return swiperRef?.current?.swiper?.slideTo(activeSlide - slidesPerView);
   };
+
+  // useEffect(() => {
+  //   console.log(slidesPerView, slideCount);
+  //   setHide(slidesPerView >= slideCount);
+  // }, [slidesPerView, slideCount]);
 
   const params = {
     spaceBetween: 16,
@@ -44,6 +50,10 @@ const BooksList = ({ title, href, books }) => {
     },
   };
 
+  const isHidden =
+    swiperRef?.current?.swiper?.params?.slidesPerView >=
+    swiperRef?.current?.swiper?.slides?.length;
+
   return (
     <div className="pt-2 sm:pt-8 pb-4 px-2 overflow-hidden relative">
       <div className="mb-4 flex items-center xs:flex-row justify-between xs:items-baseline ">
@@ -64,8 +74,8 @@ const BooksList = ({ title, href, books }) => {
           )}
         </div>
         <div
-          className={`flex xs:mt-0 items-center gap-4 ${
-            slidesPerView >= slideCount ? "hidden" : ""
+          className={`flex xs:mt-0 items-center gap-4  ${
+            isHidden ? "hidden" : ""
           }`}
         >
           <div className="hidden sm:block bg-indigo-100 h-2 w-12 sm:w-18 rounded-md overflow-hidden">
@@ -115,9 +125,9 @@ const BooksList = ({ title, href, books }) => {
         }}
         onProgress={(_, progress) => setProgress(progress)}
       >
-        {books.map((n) => (
-          <SwiperSlide key={n} className="">
-            <Book />
+        {books?.map((book) => (
+          <SwiperSlide key={book.id} className="">
+            <Book book={book} />
           </SwiperSlide>
         ))}
       </Swiper>

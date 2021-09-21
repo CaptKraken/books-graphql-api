@@ -89,6 +89,20 @@ export const resolvers = {
       if (!book) throw new Error(`No book found by that id.`);
       return book;
     },
+    getBooksByCategory: async (
+      _par,
+      { category_id, sortBy, sortDirection, limit, offset }
+    ) => {
+      const books = await posgres("books")
+        .select()
+        .whereRaw(`${category_id} = any(categories)`)
+        .orderBy(sortBy, sortDirection)
+        .limit(Number(limit))
+        .offset(Number(offset));
+
+      if (!books) throw new Error(`No book found.`);
+      return books.map((book) => book);
+    },
     getBooks: async (_par, { sortBy, sortDirection, limit, offset }) => {
       const books = await posgres("books")
         .select()

@@ -36,6 +36,13 @@ export const typeDefs = gql`
       limit: Int = 50
       offset: Int = 0
     ): [Book!]!
+    getBooksByCategory(
+      category_id: ID!
+      sortBy: String = "book_id"
+      sortDirection: String = "asc"
+      limit: Int = 50
+      offset: Int = 0
+    ): [Book!]!
     getCategories(
       sortBy: String = "category_id"
       sortDirection: String = "asc"
