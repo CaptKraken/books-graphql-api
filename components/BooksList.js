@@ -54,6 +54,11 @@ const BooksList = ({ title, href, books }) => {
     swiperRef?.current?.swiper?.params?.slidesPerView >=
     swiperRef?.current?.swiper?.slides?.length;
 
+  const isLast =
+    swiperRef?.current?.swiper?.activeIndex +
+      swiperRef?.current?.swiper?.params?.slidesPerView ===
+    swiperRef?.current?.swiper?.slides?.length;
+
   return (
     <div className="pt-2 sm:pt-8 pb-4 px-2 overflow-hidden relative">
       <div className="mb-4 flex items-center xs:flex-row justify-between xs:items-baseline ">
@@ -101,7 +106,7 @@ const BooksList = ({ title, href, books }) => {
             <button
               className="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 w-full justify-center disabled:bg-gray-500"
               onClick={handleNextSlides}
-              disabled={activeSlide + slidesPerView === slideCount}
+              disabled={isLast}
             >
               <ChevronDoubleRightIcon
                 className="-ml-0.5 h-2 w-2 xs:h-4 xs:w-4"
