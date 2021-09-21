@@ -8,7 +8,7 @@ const initQuote = {
 
 const QuoteSkeleton = () => {
   return (
-    <div className="bg-gray-800 text-gray-200 rounded-md py-4 px-12">
+    <div className="bg-gray-800 text-gray-200 rounded-md py-4  px-4 xs:px-8 sm:px-10 md:px-12">
       <div className="animate-pulse max-w-2xl mx-auto flex flex-col gap-3">
         <div>
           <h3 className="text-base sm:text-xl lg:text-2xl bg-white rounded-md mb-2">
@@ -46,7 +46,7 @@ const Hero = () => {
   if (loading) return <QuoteSkeleton />;
   // if (error) return <p>error</p>;
   return (
-    <div className="bg-gray-800 text-gray-200 rounded-md py-4 px-12 flex flex-col">
+    <div className="bg-gray-800 text-gray-200 rounded-md py-4 px-4 xs:px-8 sm:px-10 md:px-12 flex flex-col">
       <div className="max-w-2xl mx-auto flex flex-col">
         <h3 className="text-base sm:text-xl lg:text-2xl">{quote?.text}</h3>
         <span className="text-xs lg:text-base font-bold self-end">
