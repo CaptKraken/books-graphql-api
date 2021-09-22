@@ -5,4 +5,4 @@ export function classNames(...classes) {
 export const BASE_URL =
   process.env.NODE_ENV !== "productions"
     ? "http://localhost:3000"
-    : "https://books-graphql-api.vercel.app/";
+    : "https://books-graphql-api.vercel.app";
