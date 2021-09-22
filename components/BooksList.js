@@ -8,7 +8,7 @@ import {
   ChevronDoubleRightIcon,
 } from "@heroicons/react/outline";
 
-const BooksList = ({ title, href, books }) => {
+const BooksList = ({ title, href, params, small, children }) => {
   const swiperRef = useRef(null);
   const [progress, setProgress] = useState(0);
   const [activeSlide, setActiveSlide] = useState(0);
@@ -28,28 +28,6 @@ const BooksList = ({ title, href, books }) => {
   //   setHide(slidesPerView >= slideCount);
   // }, [slidesPerView, slideCount]);
 
-  const params = {
-    spaceBetween: 16,
-    slidesPerView: 4,
-    breakpoints: {
-      1024: {
-        slidesPerView: 5,
-      },
-      768: {
-        slidesPerView: 4,
-      },
-      640: {
-        slidesPerView: 3,
-      },
-      320: {
-        slidesPerView: 2,
-      },
-      1: {
-        slidesPerView: 1,
-      },
-    },
-  };
-
   const isHidden =
     swiperRef?.current?.swiper?.params?.slidesPerView >=
     swiperRef?.current?.swiper?.slides?.length;
@@ -60,7 +38,7 @@ const BooksList = ({ title, href, books }) => {
     swiperRef?.current?.swiper?.slides?.length;
 
   return (
-    <div className="pt-2 sm:pt-8 pb-4 px-2 overflow-hidden relative">
+    <div className="pt-2 pb-4 px-2 overflow-hidden relative">
       <div className="mb-4 flex items-center xs:flex-row justify-between xs:items-baseline ">
         <div className="flex items-baseline gap-2">
           <h2
@@ -130,14 +108,35 @@ const BooksList = ({ title, href, books }) => {
         }}
         onProgress={(_, progress) => setProgress(progress)}
       >
-        {books?.map((book) => (
-          <SwiperSlide key={book.id} className="">
-            <Book book={book} />
-          </SwiperSlide>
-        ))}
+        {children}
       </Swiper>
     </div>
   );
+};
+
+BooksList.defaultProps = {
+  params: {
+    spaceBetween: 16,
+    slidesPerView: 4,
+    breakpoints: {
+      1024: {
+        slidesPerView: 5,
+      },
+      768: {
+        slidesPerView: 4,
+      },
+      640: {
+        slidesPerView: 3,
+      },
+      320: {
+        slidesPerView: 2,
+      },
+      1: {
+        slidesPerView: 1,
+      },
+    },
+  },
+  small: false,
 };
 
 export default BooksList;

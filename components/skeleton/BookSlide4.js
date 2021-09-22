@@ -3,7 +3,7 @@ import {
   ChevronDoubleRightIcon,
 } from "@heroicons/react/outline";
 
-const BookSlide = () => {
+const BookSlide4 = () => {
   return (
     <div className="pt-2 sm:pt-8 pb-4 px-2 overflow-hidden relative">
       <div className="mb-4 flex items-center xs:flex-row justify-between xs:items-baseline animate-pulse ">
@@ -46,20 +46,17 @@ const BookSlide = () => {
           </div>
         </div>
       </div>
-      <div className="bg-gray-600 rounded-md animate-pulse w-full p-2 h-96 2xs:h-72 sm:h-72 lg:h-96 flex justify-between sm:p-4 gap-4">
-        <div className="bg-gray-400 w-full 2xs:w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 rounded-md">
+      <div className="bg-gray-600 rounded-md animate-pulse w-full p-2 h-96 2xs:h-72 sm:h-72 lg:h-82 max-h-96 flex justify-between sm:p-4 gap-4">
+        <div className="bg-gray-400 w-full xs:1/2 sm:w-1/3 md:w-1/3 lg:w-1/4 rounded-md">
           &nbsp;
         </div>
-        <div className="bg-gray-400 hidden 2xs:w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 rounded-md 2xs:block">
+        <div className="bg-gray-400 hidden w-full xs:1/2 sm:w-1/3 md:w-1/3 lg:w-1/4 rounded-md 2xs:block">
           &nbsp;
         </div>
-        <div className="bg-gray-400 hidden sm:w-1/3 md:w-1/4 lg:w-1/5 rounded-md sm:block">
+        <div className="bg-gray-400 hidden sm:w-1/3 lg:w-1/4 rounded-md sm:block">
           &nbsp;
         </div>
-        <div className="bg-gray-400 hidden md:w-1/4 lg:w-1/5 rounded-md md:block">
-          &nbsp;
-        </div>
-        <div className="bg-gray-400 w-1/5 rounded-md hidden lg:block">
+        <div className="bg-gray-400 hidden lg:w-1/4 rounded-md lg:block">
           &nbsp;
         </div>
       </div>
@@ -67,4 +64,4 @@ const BookSlide = () => {
   );
 };
 
-export default BookSlide;
+export default BookSlide4;
