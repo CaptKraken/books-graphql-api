@@ -16,6 +16,7 @@ export const typeDefs = gql`
     getCategory(category_id: ID! = 1): Category!
     getAuthor(authorid: ID! = 1): Author!
     getRandomQuote: Quote!
+    countBooks: BookCount!
 
     # GET MULTIPLE
     getUsers(
@@ -152,5 +153,9 @@ export const typeDefs = gql`
   type Quote {
     text: String!
     author: String!
+  }
+
+  type BookCount {
+    count: Int!
   }
 `;

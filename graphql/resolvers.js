@@ -113,6 +113,10 @@ export const resolvers = {
       if (!books) throw new Error(`No book found.`);
       return books.map((book) => book);
     },
+    countBooks: async () => {
+      const booksCount = await posgres("books").count("book_id").first();
+      return booksCount;
+    },
     getCategory: async (_par, { category_id }) => {
       const category = await posgres("categories")
         .select()
@@ -212,14 +216,12 @@ export const resolvers = {
       return addedAuthor[0];
     },
     addCategory: async (_par, { input: { name_english, name_khmer } }) => {
-      console.log();
       if (!name_english || !name_khmer) {
         throw new Error("category's name can not be empty.");
       }
       const addedCategory = await posgres("categories")
         .insert([{ category_name: name_english, category_name_km: name_khmer }])
         .returning("*");
-      console.log(addedCategory);
       return addedCategory[0];
     },
 

@@ -52,7 +52,7 @@ export const getNewInfo = async (input, original) => {
 
   // get all keys from original data from database
   const originalKeys = Object.keys(original);
-  console.log(input, originalKeys);
+
   // compare keys
   Object.keys(input).map((inp) => {
     if (originalKeys.includes(inp)) {
