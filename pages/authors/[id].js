@@ -5,7 +5,7 @@ import { plural, getInitial } from "@/utils/client";
 import { BookOpenIcon, ExclamationCircleIcon } from "@heroicons/react/outline";
 import BookCard from "@/components/BookCard";
 import SingleAuthor from "@/components/skeleton/SingleAuthor";
-import Link from 'next/link'
+import Link from "next/link";
 const SingleAuthorPage = () => {
   const router = useRouter();
   const { id: authorid } = router.query;
