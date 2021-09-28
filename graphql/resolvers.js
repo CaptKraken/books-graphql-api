@@ -115,7 +115,7 @@ export const resolvers = {
     },
     countBooks: async () => {
       const booksCount = await posgres("books").count("book_id").first();
-      return booksCount;
+      return booksCount.count;
     },
     getCategory: async (_par, { category_id }) => {
       const category = await posgres("categories")
@@ -451,6 +451,14 @@ export const resolvers = {
         .whereRaw(`${author_id} = any(authors)`)
         .limit(50);
       return books.map((book) => book);
+    },
+    book_count: async ({ author_id }) => {
+      const booksCount = await posgres("books")
+        .count("book_id")
+        .whereRaw(`${author_id} = any(authors)`)
+        .first();
+      if (!booksCount) return 0;
+      return booksCount?.count;
     },
   },
 

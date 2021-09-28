@@ -45,3 +45,42 @@ export const GET_RELATED_BOOKS = gql`
     }
   }
 `;
+
+/**
+ * get one author by id
+ * @variable authorid: String
+ * @return author: author object
+ */
+export const GET_SINGLE_AUTHOR = gql`
+  query Query($authorid: ID!) {
+    author: getAuthor(authorid: $authorid) {
+      id
+      name
+      book_count
+      books {
+        id
+        title
+        authors {
+          id
+          name
+        }
+        page_count
+        published
+        image_url
+      }
+    }
+  }
+`;
+/**
+ * get all authors
+ * @return authors: author object
+ */
+export const GET_ALL_AUTHORS = gql`
+  query Query {
+    authors: getAuthors {
+      id
+      name
+      book_count
+    }
+  }
+`;

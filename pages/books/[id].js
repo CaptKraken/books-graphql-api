@@ -41,8 +41,6 @@ const BookDetails = ({ server_rendered }) => {
     },
   });
 
-  //   console.log(server_rendered, categoryid, data);
-
   if (error || (!data?.books && !loading)) return <p>error</p>;
   if (loading)
     return (

@@ -42,9 +42,7 @@ const Hero = () => {
   useEffect(() => {
     if (data) setQuote(data?.quote);
   }, [data]);
-  // if (data) console.log(data);
   if (loading) return <QuoteSkeleton />;
-  // if (error) return <p>error</p>;
   return (
     <div className="bg-gray-800 text-gray-200 rounded-md mb-4 md:mb-0 py-4 px-4 xs:px-8 sm:px-10 md:px-12 flex flex-col">
       <div className="max-w-2xl mx-auto flex flex-col">

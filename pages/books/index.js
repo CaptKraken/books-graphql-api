@@ -16,35 +16,7 @@ const BooksPage = ({ server_rendered }) => {
   const router = useRouter();
   const page = Number(router.query.page) || 0;
   const offset = page - 1 < 1 ? 0 : (page - 1) * MAX_FETCH;
-  const totalPageCount = Math.ceil(
-    server_rendered?.data?.count?.count / MAX_FETCH
-  );
-
-  // const tpc = [...Array(totalPageCount).keys()];
-  // tpc.map((t) => console.log("hi"));
-  // const GET_POPULAR_BOOK = gql`
-  //   query Query($sortBy: String, $direction: String, $limit: Int) {
-  //     popularBooks: getBooks(
-  //       sortBy: $sortBy
-  //       sortDirection: $direction
-  //       limit: $limit
-  //     ) {
-  //       id
-  //       title
-  //       image_url
-  //       authors {
-  //         name
-  //       }
-  //     }
-  //   }
-  // `;
-  // const { data: popular, loading, error } = useQuery(GET_POPULAR_BOOK, {
-  //   variables: {
-  //     limit: 6,
-  //     sortBy: "view",
-  //     direction: "asc",
-  //   },
-  // });
+  const totalPageCount = Math.ceil(server_rendered?.data?.count / MAX_FETCH);
 
   const GET_BOOK = gql`
     query Query(
@@ -121,7 +93,7 @@ const BooksPage = ({ server_rendered }) => {
           <div className="px-2 flex flex-col gap-4">
             <div className="flex flex-col gap-2 sm:flex-row items-center justify-between">
               <h2 className="text-base xs:text-lg sm:text-2xl font-bold">
-                All Books ({Math.ceil(server_rendered?.data?.count?.count)})
+                All Books ({Math.ceil(server_rendered?.data?.count)})
               </h2>
               {totalPageCount > 1 && (
                 <Pagination
@@ -140,7 +112,7 @@ const BooksPage = ({ server_rendered }) => {
             {data?.books?.length === 0 && <div>No books</div>}
           </div>
         </div>
-        <div className="pt-2 md:w-3/12 sticky">
+        <div className="pt-2 md:w-3/12">
           <div className="bg-gray-600 md:hidden rounded-md w-full">&nbsp;</div>
           <div className="sticky">
             <SideBarElement title="Authors">
@@ -197,9 +169,7 @@ export async function getServerSideProps({ query: q }) {
       name_english
       name_khmer
     }
-    count: countBooks {
-      count
-    }
+    count: countBooks
     ${mainpage ? `latest_books: ${latest}` : ``}
   }`;
 
@@ -217,5 +187,4 @@ export async function getServerSideProps({ query: q }) {
   // Pass data to the page via props
   return { props: { server_rendered: data } };
 }
-
 export default BooksPage;

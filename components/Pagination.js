@@ -12,7 +12,7 @@ const generateUrl = (currentpage) => {
   return `/books?page=${currentpage}`;
 };
 
-const Pagination = ({ totalPageCount = 1, currentPage }) => {
+const Pagination = ({ totalPageCount = 1, currentPage, firstLast }) => {
   if (currentPage <= 1) currentPage = 1;
   const tpc = [...Array(totalPageCount).keys()];
   const btn =
@@ -21,12 +21,14 @@ const Pagination = ({ totalPageCount = 1, currentPage }) => {
     <div className="text-white flex flex-row gap-2">
       {currentPage - 1 !== 0 && (
         <>
-          <Link href={generateUrl(0)}>
-            <a className={classNames(btn)}>
-              <ChevronDoubleLeftIcon className="h-2 w-2 xs:h-4 xs:w-4" />
-              <span className="sr-only">First Page</span>
-            </a>
-          </Link>
+          {firstLast && (
+            <Link href={generateUrl(0)}>
+              <a className={classNames(btn)}>
+                <ChevronDoubleLeftIcon className="h-2 w-2 xs:h-4 xs:w-4" />
+                <span className="sr-only">First Page</span>
+              </a>
+            </Link>
+          )}
           <Link href={generateUrl(currentPage - 1)}>
             <a className={classNames(btn)}>
               <ChevronLeftIcon className="xs:h-4 h-2 w-2 xs:w-4" />
@@ -61,12 +63,14 @@ const Pagination = ({ totalPageCount = 1, currentPage }) => {
               <span className="sr-only">First Page</span>
             </a>
           </Link>
-          <Link href={generateUrl(totalPageCount)}>
-            <a className={classNames(btn)}>
-              <ChevronDoubleRightIcon className=" xs:h-4 h-2 w-2 xs:w-4" />
-              <span className="sr-only">First Page</span>
-            </a>
-          </Link>
+          {firstLast && (
+            <Link href={generateUrl(totalPageCount)}>
+              <a className={classNames(btn)}>
+                <ChevronDoubleRightIcon className=" xs:h-4 h-2 w-2 xs:w-4" />
+                <span className="sr-only">First Page</span>
+              </a>
+            </Link>
+          )}
         </>
       )}
     </div>

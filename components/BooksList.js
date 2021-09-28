@@ -22,12 +22,6 @@ const BooksList = ({ title, href, params, small, children }) => {
   const handlePrevSlides = () => {
     return swiperRef?.current?.swiper?.slideTo(activeSlide - slidesPerView);
   };
-
-  // useEffect(() => {
-  //   console.log(slidesPerView, slideCount);
-  //   setHide(slidesPerView >= slideCount);
-  // }, [slidesPerView, slideCount]);
-
   const isHidden =
     swiperRef?.current?.swiper?.params?.slidesPerView >=
     swiperRef?.current?.swiper?.slides?.length;
