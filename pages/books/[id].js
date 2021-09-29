@@ -9,6 +9,7 @@ import BooksList from "@/components/BooksList";
 import { SwiperSlide } from "swiper/react";
 import Book from "@/components/Book";
 import { BASE_URL } from "@/utils/client";
+import HeadHTML from "@/components/layout/Head";
 
 const params = {
   spaceBetween: 16,
@@ -41,10 +42,30 @@ const BookDetails = ({ server_rendered }) => {
     },
   });
 
-  if (error || (!data?.books && !loading)) return <p>error</p>;
+  if (error || (!data?.books && !loading))
+    return (
+      <div className="w-full flex justify-center mt-4">
+        <HeadHTML title="Error" />
+        <div>
+          <h3 className="text-2xl flex items-center gap-2">
+            <ExclamationCircleIcon className="h-8 w-8" />
+            <span>Error</span>
+          </h3>
+          <p>Something went wrong. Please check again later.</p>
+          <div className="mt-4">
+            <Link href="/">
+              <a className="bg-indigo-300 hover:bg-indigo-400 px-3 py-1 rounded-md">
+                Go back to home page
+              </a>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   if (loading)
     return (
       <div className="animate-bounce flex flex-col items-center">
+        <HeadHTML title="Loading" />
         <BookOpenIcon className="h-12 w-12 text-indigo-500" />
         <p>Loading</p>
       </div>
@@ -52,6 +73,7 @@ const BookDetails = ({ server_rendered }) => {
 
   return (
     <div className="flex flex-col items-center justify-center">
+      <HeadHTML title={server_rendered?.data?.book?.title} />
       <div className="sm:my-8">
         <h2 className="text-center text-xl sm:text-2xl lg:text-3xl">
           {server_rendered?.data?.book?.title}
@@ -102,7 +124,10 @@ const BookDetails = ({ server_rendered }) => {
             </dt>
             <dd className="col-span-4 xs:col-span-3 lg:col-span-4 text-xs xs:text-sm lg:text-base text-gray-900 flex gap-2">
               {server_rendered?.data?.book?.categories?.map((category) => (
-                <Link href={`/categories/${category?.id}`} key={category?.id}>
+                <Link
+                  href={`/categories/${category?.name_english}`}
+                  key={category?.id}
+                >
                   <a className="text-xs xs:text-sm lg:text-base flex gap-2 hover:underline">
                     <span>{category?.name_english}</span>
                     {/* <span>{category.name_khmer}</span> */}

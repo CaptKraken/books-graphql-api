@@ -8,7 +8,7 @@ import {
 } from "@heroicons/react/outline";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { classNames } from "../../utils/client";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import SignInBtn from "../SignInBtn";
 
@@ -22,8 +22,8 @@ const navitems = [
     href: "/books",
   },
   {
-    text: "Authors",
-    href: "/authors",
+    text: "Search",
+    href: "/search",
   },
 ];
 const profilemenus = [
@@ -54,7 +54,16 @@ const Navigation = () => {
   const { asPath } = useRouter();
 
   const isActive = (href) => {
-    return asPath === href;
+    if (href === "/" && asPath === href) return true;
+    return href !== "/" && asPath.includes(href);
+  };
+  const router = useRouter();
+  const searchbarRef = useRef();
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const searchterm = searchbarRef?.current?.value;
+    if (!searchterm) return;
+    router.push(`/search?q=${searchterm}`);
   };
 
   return (
@@ -100,7 +109,10 @@ const Navigation = () => {
               </div>
               <div className="flex-1 flex justify-center px-2 lg:ml-6 lg:justify-end">
                 {/* SEARCH */}
-                <div className="max-w-lg w-full lg:max-w-xs">
+                <form
+                  className="max-w-lg w-full lg:max-w-xs"
+                  onSubmit={handleSearch}
+                >
                   <label htmlFor="search" className="sr-only">
                     Search
                   </label>
@@ -112,6 +124,7 @@ const Navigation = () => {
                       />
                     </div>
                     <input
+                      ref={searchbarRef}
                       id="search"
                       name="search"
                       className="block w-full pl-10 pr-3 py-2 border border-transparent rounded-md leading-5 bg-gray-700 text-gray-300 placeholder-gray-400 focus:outline-none focus:bg-white focus:border-white focus:ring-white focus:text-gray-900 sm:text-sm"
@@ -119,7 +132,7 @@ const Navigation = () => {
                       type="search"
                     />
                   </div>
-                </div>
+                </form>
               </div>
               {/* Mobile nav button */}
               <div className="flex lg:hidden">

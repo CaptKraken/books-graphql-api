@@ -2,7 +2,7 @@ export const classNames = (...classes) => {
   return classes.filter(Boolean).join(" ");
 };
 export const plural = (count) => {
-  if(!count) return
+  if (!count) return;
   return count > 1 ? "s" : "";
 };
 export const getInitial = (name) => {
@@ -19,3 +19,4 @@ export const BASE_URL =
     : "https://books-graphql-api.vercel.app";
 
 export const MAX_FETCH = 3;
+export const MAX_FETCH_SEARCH = 12;

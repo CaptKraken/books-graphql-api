@@ -117,12 +117,21 @@ export const resolvers = {
       const booksCount = await posgres("books").count("book_id").first();
       return booksCount.count;
     },
-    getCategory: async (_par, { category_id }) => {
-      const category = await posgres("categories")
-        .select()
-        .where({ category_id })
-        .first();
-
+    getCategory: async (_par, { category_id, field, value }) => {
+      console.log(category_id, field, value);
+      let category;
+      if (category_id) {
+        category = await posgres("categories")
+          .select()
+          .where({ category_id })
+          .first();
+      }
+      if (field && value) {
+        category = await posgres("categories")
+          .select()
+          .whereRaw(`${field}='${value}'`)
+          .first();
+      }
       if (!category) throw new Error(`No category found.`);
       return category;
     },
@@ -136,17 +145,35 @@ export const resolvers = {
       if (!categories) throw new Error(`No book found.`);
       return categories.map((category) => category);
     },
-    searchBooks: async (_par, { searchTerm }) => {
+    countSearchResult: async (_par, { searchTerm }) => {
+      if (!searchTerm) throw new Error(`Search term can't be empty.`);
       const term = searchTerm.toLowerCase();
-      const books = await posgres("books")
-        .select()
+      const count = await posgres("books")
+        .countDistinct("books.book_id")
         .joinRaw("JOIN authors ON authors.author_id = any(books.authors) ")
         .whereRaw(`LOWER(authors.author_name) LIKE '%${term}%'`)
         .orWhereRaw(`LOWER(books.title) LIKE '%${term}%'`)
         .orWhereRaw(`LOWER(books.description) LIKE '%${term}%'`)
-        .orderBy("books.book_id")
-        .limit(50);
-
+        .first();
+      return count.count;
+    },
+    searchBooks: async (_par, { searchTerm, limit, offset }) => {
+      if (!searchTerm) throw new Error(`Search term can't be empty.`);
+      const term = searchTerm.toLowerCase();
+      const count = await posgres("books")
+        .countDistinct("books.book_id")
+        .joinRaw("JOIN authors ON authors.author_id = any(books.authors) ")
+        .whereRaw(`LOWER(authors.author_name) LIKE '%${term}%'`)
+        .orWhereRaw(`LOWER(books.title) LIKE '%${term}%'`)
+        .orWhereRaw(`LOWER(books.description) LIKE '%${term}%'`);
+      const books = await posgres("books")
+        .distinctOn("books.book_id")
+        .joinRaw("JOIN authors ON authors.author_id = any(books.authors) ")
+        .whereRaw(`LOWER(authors.author_name) LIKE '%${term}%'`)
+        .orWhereRaw(`LOWER(books.title) LIKE '%${term}%'`)
+        .orWhereRaw(`LOWER(books.description) LIKE '%${term}%'`)
+        .limit(limit)
+        .offset(offset);
       if (!books) throw new Error(`No book found.`);
       return books.map((book) => book);
     },
@@ -466,5 +493,21 @@ export const resolvers = {
     id: (category) => category.category_id,
     name_english: (category) => category.category_name,
     name_khmer: (category) => category.category_name_km,
+    books: async ({ category_id }) => {
+      // i cant figure out the data loader since it's not connected
+      const books = await posgres("books")
+        .select()
+        .whereRaw(`${category_id} = any(categories)`)
+        .limit(50);
+      return books.map((book) => book);
+    },
+    book_count: async ({ category_id }) => {
+      const booksCount = await posgres("books")
+        .count("book_id")
+        .whereRaw(`${category_id} = any(categories)`)
+        .first();
+      if (!booksCount) return 0;
+      return booksCount?.count;
+    },
   },
 };

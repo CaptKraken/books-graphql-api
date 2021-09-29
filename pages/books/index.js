@@ -115,22 +115,22 @@ const BooksPage = ({ server_rendered }) => {
         <div className="pt-2 md:w-3/12">
           <div className="bg-gray-600 md:hidden rounded-md w-full">&nbsp;</div>
           <div className="sticky">
-            <SideBarElement title="Authors">
+            <SideBarElement href="/authors" title="Authors">
               {server_rendered?.data?.authors?.map((author) => (
                 <Link href={`/authors/${author.id}`} key={author.id}>
-                  <a className="px-1 rounded-md bg-indigo-400 hover:bg-indigo-300">
+                  <a className="px-1 rounded-md bg-indigo-400 hover:bg-indigo-300 text-sm ms:text-base">
                     {author.name}
                   </a>
                 </Link>
               ))}
             </SideBarElement>
-            <SideBarElement title="Categories">
+            <SideBarElement href="/categories" title="Categories">
               {server_rendered?.data?.categories?.map((category) => (
                 <Link
                   href={`/categories/${category.name_english}`}
                   key={category.id}
                 >
-                  <a className="px-1 rounded-md bg-indigo-400 hover:bg-indigo-300">
+                  <a className="px-1 rounded-md bg-indigo-400 hover:bg-indigo-300 text-sm ms:text-base">
                     {category.name_english}
                   </a>
                 </Link>
@@ -160,11 +160,11 @@ export async function getServerSideProps({ query: q }) {
 }`;
 
   const query = `query Query {
-    authors: getAuthors {
+    authors: getAuthors(limit: 15) {
       id
       name
     }
-    categories: getCategories {
+    categories: getCategories(limit: 10) {
       id
       name_english
       name_khmer

@@ -13,7 +13,7 @@ export const typeDefs = gql`
     me: User! @authenticated
     getUser(id: ID! = 1): User!
     getBook(bookid: ID! = 1): Book!
-    getCategory(category_id: ID! = 1): Category!
+    getCategory(category_id: ID, field: String, value: String): Category!
     getAuthor(authorid: ID! = 1): Author!
     getRandomQuote: Quote!
     countBooks: Int!
@@ -28,7 +28,7 @@ export const typeDefs = gql`
     getAuthors(
       sortBy: String = "author_id"
       sortDirection: String = "asc"
-      limit: Int = 50
+      limit: Int = 25
       offset: Int = 0
     ): [Author!]!
     getBooks(
@@ -47,12 +47,13 @@ export const typeDefs = gql`
     getCategories(
       sortBy: String = "category_id"
       sortDirection: String = "asc"
-      limit: Int = 50
+      limit: Int = 25
       offset: Int = 0
     ): [Category!]!
 
     # SEARCH
-    searchBooks(searchTerm: String): [Book!]!
+    searchBooks(searchTerm: String, limit: Int = 50, offset: Int = 0): [Book!]!
+    countSearchResult(searchTerm: String): Int
   }
 
   type Mutation {
@@ -149,6 +150,8 @@ export const typeDefs = gql`
     id: ID
     name_english: String
     name_khmer: String
+    books: [Book]!
+    book_count: Int
   }
 
   type Quote {
@@ -156,7 +159,7 @@ export const typeDefs = gql`
     author: String!
   }
 
-  type BookCount {
+  type ResultCount {
     count: Int!
   }
 `;

@@ -6,6 +6,7 @@ import HomePageSkeleton from "@/components/skeleton/HomePage";
 import { useQuery, gql } from "@apollo/client";
 import { SwiperSlide } from "swiper/react";
 import HeadHTML from "../components/layout/Head";
+import { ExclamationCircleIcon } from "@heroicons/react/outline";
 
 const Home = () => {
   const GET_BOOK = gql`
@@ -46,6 +47,27 @@ const Home = () => {
   `;
 
   const { data, loading, error } = useQuery(GET_BOOK);
+
+  if (error)
+    return (
+      <div className="w-full flex justify-center mt-4">
+        <HeadHTML title="Error" />
+        <div>
+          <h3 className="text-2xl flex items-center gap-2">
+            <ExclamationCircleIcon className="h-8 w-8" />
+            <span>Error</span>
+          </h3>
+          <p>Something went wrong. Please check again later.</p>
+          <div className="mt-4">
+            <Link href="/">
+              <a className="bg-indigo-300 hover:bg-indigo-400 px-3 py-1 rounded-md">
+                Refresh page
+              </a>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
 
   return (
     <>
