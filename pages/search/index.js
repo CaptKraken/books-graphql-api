@@ -84,9 +84,9 @@ const SearchPage = ({ server_rendered }) => {
             </div>
           </div>
         )}
-        {data && (
-          <div className="md:w-9/12">
-            {loading && <SearchBooks />}
+        <div className="md:w-9/12">
+          {loading && <SearchBooks />}
+          {data && (
             <div className="px-2 flex flex-col gap-4">
               <div className="flex flex-col gap-2 sm:flex-row items-center justify-between">
                 <h2 className="text-base xs:text-lg sm:text-2xl font-bold">
@@ -109,8 +109,8 @@ const SearchPage = ({ server_rendered }) => {
               )}
               {data?.books?.length === 0 && <div>No books</div>}
             </div>
-          </div>
-        )}
+          )}
+        </div>
         <div className="pt-2 md:w-3/12">
           <div className="bg-gray-600 md:hidden rounded-md w-full">&nbsp;</div>
           <div>
