@@ -85,7 +85,7 @@ const SearchPage = ({ server_rendered }) => {
           </div>
         )}
         <div className="md:w-9/12">
-          {loading && <SearchBooks />}
+          {searchterm && loading && <SearchBooks />}
           {data && (
             <div className="px-2 flex flex-col gap-4">
               <div className="flex flex-col gap-2 sm:flex-row items-center justify-between">
