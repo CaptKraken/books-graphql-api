@@ -1,8 +1,16 @@
 import { plural } from "@/utils/client";
+import { HeartIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 const BookCard = ({ book }) => {
   if (!book) return;
   const img = book.image_url;
+  /**
+   * CHECK IF FAVORITE:
+   *
+   * compare book.id with current user's list
+   *
+   */
+
   return (
     <div className="w-full flex gap-4 rounded-md overflow-hidden items-center relative border-2 flex-row">
       <img
@@ -11,6 +19,9 @@ const BookCard = ({ book }) => {
         className="w-4/12 md:w-6/12 lg:w-4/12 ms:h-62 md:h-72"
       />
       <div className="w-8/12 xs:mb-4">
+        <button className="absolute top-2 right-2 z-50">
+          <HeartIcon className="w-6 h-6 text-black hover:text-red-500" />
+        </button>
         <p className="text-xs xs:text-base sm:text-xl md:text-base xl:text-xl">
           {book.title}
         </p>
@@ -21,9 +32,6 @@ const BookCard = ({ book }) => {
           {book.published}
         </p>
         <div className="flex gap-1">
-          <p className="text-sm xs:text-sm sm:text-base md:text-sm xl:text-base">
-            Author{plural(book.authors.length)}
-          </p>
           <div className="flex flex-col">
             {book?.authors &&
               book?.authors.map((author) => (

@@ -1,3 +1,4 @@
+import { HeartIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import Link from "next/link";
 const fallbackImg =
@@ -10,10 +11,24 @@ const Book = ({ book, small }) => {
       : (authors += author.name);
   });
 
+  /**
+   * CHECK IF FAVORITE:
+   *
+   * compare book.id with current user's list
+   *
+   */
+
   return (
     <Link href={`/books/${book?.id}`}>
       <a title={book.title}>
         <div className="hover:scale-105 transition-all rounded-md relative group overflow-hidden max-w-xs">
+          <button
+            className="hidden group-hover:block absolute top-2 right-2 z-50"
+            title="Add to your list"
+          >
+            <HeartIcon className="w-6 h-6 text-white hover:text-red-500" />
+            <span className="sr-only">Add to your list</span>
+          </button>
           <div className="rounded-md group-hover:brightness-50">
             <Image
               src={book.image_url || fallbackImg}

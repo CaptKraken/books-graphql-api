@@ -1,5 +1,5 @@
 import SignIn from "@/components/SignIn";
-
+import Link from "next/link";
 const SignInPage = () => {
   /**
    * if(isAuth) redirect '/'
@@ -16,6 +16,16 @@ const SignInPage = () => {
         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
           Sign in to Internal Books
         </h2>
+        <div className="text-center">
+          <p>
+            Do not have an account?{" "}
+            <Link href="/auth/signup">
+              <a className="font-medium text-indigo-600 hover:text-indigo-500">
+                Sign up
+              </a>
+            </Link>
+          </p>
+        </div>
       </div>
       <SignIn />
     </div>

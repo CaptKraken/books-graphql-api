@@ -1,9 +1,9 @@
 import SignUp from "@/components/SignUp";
-
-const SignOutPage = () => {
+const SignUpPage = () => {
   /**
    * if(isAuth) redirect '/'
    */
+
 
   return (
     <div className="py-12">
@@ -22,4 +22,4 @@ const SignOutPage = () => {
   );
 };
 
-export default SignOutPage;
+export default SignUpPage;

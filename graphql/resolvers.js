@@ -23,7 +23,7 @@ export const resolvers = {
       const me = await posgres("people").select("*").where({ id }).first();
       return me;
     },
-    login: async (_par, { email, password }, { res }) => {
+    login: async (_par, { email, password, remember }, { res }) => {
       const user = await posgres("people")
         .select("*")
         .where({ email: email.toLowerCase() })

@@ -1,17 +1,21 @@
+import { useAuth } from "context/AuthContext";
+import { useRouter } from "next/router";
 import { useRef, useState } from "react";
-
+import { XIcon } from "@heroicons/react/outline";
 const SignUp = () => {
   /**
    * remeber me send something to api so we can do something like refresh token
    */
   const [error, setError] = useState("");
+  const router = useRouter();
+  const { signup, isAuthenticated } = useAuth();
 
   const nameRef = useRef();
   const emailRef = useRef();
   const passwordRef = useRef();
   const confirmPasswordRef = useRef();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     const name = nameRef.current.value;
@@ -23,13 +27,31 @@ const SignUp = () => {
       setError("All fields are required.");
     if (password !== confirmPassword) setError("Password do not match.");
 
+    const data = await signup(name, email, password);
+    if (data?.error) return setError(data?.error);
+    router.push("/me");
     // get signup from authcontext pass in (name, email, password)
   };
 
   return (
     <div className="sm:mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-      <div className="bg-white py-8 px-4 sm:shadow sm:rounded-lg sm:px-10">
-        {error && <p>PUT ERROR HERE</p>}
+      {error && (
+        <div className="my-2 rounded-md overflow-hidden">
+          <div
+            className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 relative"
+            role="alert"
+          >
+            <div className="flex items-center justify-between">
+              <p className="font-bold">Error</p>
+              <button onClick={() => setError("")}>
+                <XIcon className="w-4 h-4 hover:text-red-400" />
+              </button>
+            </div>
+            <p>{error}</p>
+          </div>
+        </div>
+      )}
+      <div className="bg-white py-8 px-4 sm:shadow sm:rounded-lg sm:px-6">
         <form className="space-y-6" onSubmit={handleSubmit}>
           {/* NAME */}
           <div>
@@ -45,7 +67,6 @@ const SignUp = () => {
                 name="name"
                 type="text"
                 ref={nameRef}
-                required
                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
             </div>
@@ -64,7 +85,6 @@ const SignUp = () => {
                 name="email"
                 type="email"
                 ref={emailRef}
-                required
                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
             </div>
@@ -83,7 +103,6 @@ const SignUp = () => {
                 name="password"
                 type="password"
                 ref={passwordRef}
-                required
                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
             </div>
@@ -102,29 +121,10 @@ const SignUp = () => {
                 name="password-confirm"
                 type="password"
                 ref={confirmPasswordRef}
-                required
                 className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
             </div>
           </div>
-          {/* REMEMBER */}
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-              <label
-                htmlFor="remember-me"
-                className="ml-2 block text-sm text-gray-900"
-              >
-                Remember me
-              </label>
-            </div>
-          </div>
-
           <div>
             <button
               type="submit"

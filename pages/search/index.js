@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { MAX_FETCH_SEARCH, BASE_URL } from "@/utils/client";
+import { MAX_FETCH_SEARCH, BASE_URL, plural } from "@/utils/client";
 import { SEARCH_FOR_BOOKS } from "@/graphql/client/queries";
 import { useQuery } from "@apollo/client";
 import HeadHTML from "@/components/layout/Head";
@@ -87,12 +87,16 @@ const SearchPage = ({ server_rendered }) => {
         {searchterm && (
           <div className="md:w-9/12">
             {loading && <SearchBooks />}
+
             {data && (
               <div className="px-2 flex flex-col gap-4">
                 <div className="flex flex-col gap-2 sm:flex-row items-center justify-between">
                   <h2 className="text-base xs:text-lg sm:text-2xl font-bold">
-                    Search Results for '{searchterm}'
+                    {server_rendered?.data?.resultCount} search result
+                    {plural(server_rendered?.data?.resultCount)} found for '
+                    {searchterm}'
                   </h2>
+
                   {totalPageCount > 1 && (
                     <SearchPagination
                       searchterm={searchterm}

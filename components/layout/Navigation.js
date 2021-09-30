@@ -7,10 +7,11 @@ import {
   LoginIcon,
 } from "@heroicons/react/outline";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { classNames } from "../../utils/client";
+import { classNames, getInitial } from "../../utils/client";
 import { Fragment, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import SignInBtn from "../SignInBtn";
+import { useAuth } from "context/AuthContext";
 
 const navitems = [
   {
@@ -49,14 +50,15 @@ const user = {
 };
 
 const Navigation = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated, currentUser } = useAuth();
 
-  const { asPath } = useRouter();
+  const { pathname } = useRouter();
 
   const isActive = (href) => {
-    if (href === "/" && asPath === href) return true;
-    return href !== "/" && asPath.includes(href);
+    if (href === "/" && pathname === href) return true;
+    return href !== "/" && pathname.includes(href);
   };
+
   const router = useRouter();
   const searchbarRef = useRef();
   const handleSearch = (e) => {
@@ -150,10 +152,7 @@ const Navigation = () => {
                 </Disclosure.Button>
               </div>
               {!isAuthenticated && (
-                <div
-                  className="hidden sm:block"
-                  onClick={() => setIsAuthenticated(true)}
-                >
+                <div className="hidden sm:block">
                   <Link href="/auth/signin">
                     <a className="ml-3 inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm leading-4 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                       <LoginIcon
@@ -182,11 +181,18 @@ const Navigation = () => {
                           <div>
                             <Menu.Button className="bg-gray-800 rounded-full flex text-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                               <span className="sr-only">Open user menu</span>
-                              <img
-                                className="h-8 w-8 rounded-full"
-                                src={user.profile_image}
-                                alt=""
-                              />
+                              {currentUser?.profile_image && (
+                                <img
+                                  className="h-8 w-8 rounded-full"
+                                  src={currentUser?.profile_image}
+                                  alt=""
+                                />
+                              )}
+                              {!currentUser?.profile_image && (
+                                <div className="h-8 w-8 rounded-full bg-gray-500 flex items-center justify-center">
+                                  <p>{getInitial(currentUser?.name)}</p>
+                                </div>
+                              )}
                             </Menu.Button>
                           </div>
                           <Transition
@@ -267,16 +273,16 @@ const Navigation = () => {
                   <div className="flex-shrink-0">
                     <img
                       className="h-10 w-10 rounded-full"
-                      src={user.profile_image}
+                      src={currentUser?.profile_image}
                       alt=""
                     />
                   </div>
                   <div className="ml-3">
                     <div className="text-base font-medium text-white">
-                      {user.name}
+                      {currentUser?.name}
                     </div>
                     <div className="text-sm font-medium text-gray-400">
-                      {user.email}
+                      {currentUser?.email}
                     </div>
                   </div>
                   <button className="ml-auto flex-shrink-0 bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">

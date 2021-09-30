@@ -7,7 +7,7 @@ export const typeDefs = gql`
 
   type Query {
     # AUTHENTICATION
-    login(email: String!, password: String!): User!
+    login(email: String, password: String): User!
 
     # GET SINGLE
     me: User! @authenticated
