@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import DataLoader from "dataloader";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import { ApolloServerPluginLandingPageGraphQLPlayground } from "apollo-server-core";
-
+import { graphqlUploadExpress } from "graphql-upload";
 import { typeDefs } from "@/graphql/typedefs";
 import { resolvers } from "@/graphql/resolvers";
 import {
@@ -88,9 +88,14 @@ const apolloServer = new ApolloServer({
   dataSources: () => ({
     quoteAPI: new QuoteApi(),
   }),
+  // uploads: false,
   // For apollo studio
   introspection: true,
   plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
+  // uploads: {
+  //   maxFileSize: 10000000, // 10 MB
+  //   maxFiles: 20,
+  // },
 });
 
 const startServer = apolloServer.start();

@@ -1,9 +1,12 @@
 import { offsetLimitPagination } from "@apollo/client/utilities";
+import { createUploadLink } from "apollo-upload-client";
 
 const { ApolloClient, InMemoryCache } = require("@apollo/client");
 
+const uploadLink = createUploadLink({ uri: "/api/graphql" });
+
 export const client = new ApolloClient({
-  uri: "/api/graphql",
+  // uri: "/api/graphql",
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
@@ -13,4 +16,5 @@ export const client = new ApolloClient({
       },
     },
   }),
+  link: uploadLink,
 });

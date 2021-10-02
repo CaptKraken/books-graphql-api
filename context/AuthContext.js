@@ -5,12 +5,22 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const localUser =
-    typeof window !== "undefined"
-      ? JSON.parse(localStorage.getItem("currentUser"))
-      : null;
+  const localUser = () => {
+    if (typeof window !== "undefined") {
+      const local = localStorage.getItem("currentUser");
+      if (!local) {
+        localStorage.removeItem("currentUser");
+        return null;
+      }
+      return JSON.parse(local);
+    }
+  };
+  // const localUser =
+  //   typeof window !== "undefined"
+  //     ?
+
   //   const localUser = JSON.parse(localStorage.getItem("user"));
-  const [currentUser, setCurrentUser] = useState(localUser);
+  const [currentUser, setCurrentUser] = useState(localUser());
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -97,7 +107,14 @@ export const AuthProvider = ({ children }) => {
     setCurrentUser(null);
   };
 
-  const value = { currentUser, isAuthenticated, login, logout, signup };
+  const value = {
+    currentUser,
+    setCurrentUser,
+    isAuthenticated,
+    login,
+    logout,
+    signup,
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

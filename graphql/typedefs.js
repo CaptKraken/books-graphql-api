@@ -8,6 +8,7 @@ export const typeDefs = gql`
   type Query {
     # AUTHENTICATION
     login(email: String, password: String): User!
+    verify(email: String, password: String): Boolean
 
     # GET SINGLE
     me: User! @authenticated
@@ -67,7 +68,7 @@ export const typeDefs = gql`
     addCategory(input: CategoryInput!): Category! @permission(role: "editor")
 
     # EDIT
-    editMe(input: UserInput!): User! @authenticated
+    editMe(input: MeInput!): User! @authenticated
     editUser(id: ID!, input: UserInput!): User! @permission(role: "admin")
     editAuthor(authorid: ID!, authorname: String!): Author!
       @permission(role: "editor")
@@ -87,6 +88,13 @@ export const typeDefs = gql`
     name: String!
     email: String!
     password: String!
+  }
+
+  input MeInput {
+    name: String
+    email: String
+    password: String
+    profile_image: String
   }
 
   input UserInput {
@@ -161,5 +169,12 @@ export const typeDefs = gql`
 
   type ResultCount {
     count: Int!
+  }
+  scalar Upload
+
+  type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
   }
 `;

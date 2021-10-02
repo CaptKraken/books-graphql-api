@@ -12,10 +12,12 @@ const MePage = () => {
   return (
     <>
       <HeadHTML title="My Profile" />
-      <h2 className="w-full text-base sm:text-lg lg:text-2xl">My Infomation</h2>
+      <h2 className="w-full text-2xl mb-4">My Infomation</h2>
       <dl className="w-full grid grid-cols-12 gap-4">
-        <dt className="col-span-3 self-center">Profile Picture</dt>
-        <dd className="col-span-9">
+        <dt className="hidden sm:block col-span-3 text-gray-300 self-center">
+          Profile Picture
+        </dt>
+        <dd className="col-span-12 sm:col-span-9">
           {user?.profile_image && (
             <img
               src={user?.profile_image}
@@ -29,14 +31,14 @@ const MePage = () => {
             </div>
           )}
         </dd>
-        <dt className="col-span-3">ID</dt>
-        <dd className="col-span-9">{user?.id}</dd>
-        <dt className="col-span-3">Role</dt>
-        <dd className="col-span-9">{user?.role}</dd>
-        <dt className="col-span-3">Name</dt>
-        <dd className="col-span-9">{user?.name}</dd>
-        <dt className="col-span-3">Email</dt>
-        <dd className="col-span-9">{user?.email}</dd>
+        <dt className="col-span-4 2xs:col-span-3 text-gray-300">ID</dt>
+        <dd className="col-span-8 2xs:col-span-9">{user?.id}</dd>
+        <dt className="col-span-4 2xs:col-span-3 text-gray-300">Role</dt>
+        <dd className="col-span-8 2xs:col-span-9">{user?.role}</dd>
+        <dt className="col-span-4 2xs:col-span-3 text-gray-300">Name</dt>
+        <dd className="col-span-8 2xs:col-span-9">{user?.name}</dd>
+        <dt className="col-span-4 2xs:col-span-3 text-gray-300">Email</dt>
+        <dd className="col-span-8 2xs:col-span-9">{user?.email}</dd>
       </dl>
     </>
   );

@@ -5,7 +5,11 @@ import {
   newCookie,
   posgres,
 } from "@/utils/index";
+import { createWriteStream } from "fs";
 import { randomQuote } from "./localquotes";
+import cloudinary from "cloudinary";
+import { GraphQLScalarType } from "graphql";
+const { GraphQLUpload, graphqlUploadExpress } = require("graphql-upload");
 
 // TODO: ADD A SORT FUNCTION (check getUsers for example)
 
@@ -36,6 +40,18 @@ export const resolvers = {
       newCookie(user, res);
       return user;
     },
+
+    verify: async (_par, { email, password }) => {
+      if (!email || !password) return false;
+      const user = await posgres("people")
+        .select("*")
+        .where({ email: String(email).toLowerCase() })
+        .first();
+
+      const match = await comparePassword(String(password), user.password);
+      return match;
+    },
+
     getUser: async (_par, { id }) => {
       const user = await posgres("people").select("*").where({ id }).first();
 
@@ -286,7 +302,7 @@ export const resolvers = {
       const toBeUpdated = await getNewInfo(input, originalMe);
       // if there's nothing to update, returns the original
       if (Object.keys(toBeUpdated).length === 0) return originalMe;
-
+      console.log("tobe", toBeUpdated);
       // otherwise, update the databse
       const editedMe = await posgres("people")
         .where({ id: String(user?.id) })

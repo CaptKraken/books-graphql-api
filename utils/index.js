@@ -41,6 +41,7 @@ export const comparePassword = async (password, hashedPassword) => {
 };
 
 export const getNewInfo = async (input, original) => {
+  console.log("input", input);
   // things to be update
   const toBeUpdated = {};
   // passwords need hashing
@@ -58,7 +59,7 @@ export const getNewInfo = async (input, original) => {
     if (originalKeys.includes(inp)) {
       // if there's password from input and isn't matching the old password
       if (inp === "password" && !match) {
-        toBeUpdated[inp] = hashedPassword;
+        if (inp["password"]) toBeUpdated[inp] = hashedPassword;
       }
       // if there's authors from input and it's not the same as the one in the database
       if (

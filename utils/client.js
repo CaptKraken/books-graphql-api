@@ -20,3 +20,21 @@ export const BASE_URL =
 
 export const MAX_FETCH = 3;
 export const MAX_FETCH_SEARCH = 12;
+
+export const fetchFromAPI = async (query, variables) => {
+  const res = await fetch(`/api/graphql`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query,
+      variables: {
+        ...variables,
+      },
+    }),
+  });
+
+  const data = await res.json();
+  return data.data;
+};
